@@ -1,7 +1,6 @@
 import React from "react";
 
 import CardItem from "./pages/CardItem";
-
 function FakeApi02() {
   return (
     <>
