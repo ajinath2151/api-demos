@@ -1,25 +1,35 @@
-import React from "react";
-import FakeApi02 from "./FakeApi02";
+import React, { useEffect, useState } from "react";
 
 function CardItem() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts").then((result) => {
+      result.json().then((response) => {
+        setData(response);
+      });
+    });
+  }, []);
+  console.log(data);
   return (
     <>
-      <div className="container">
-        <div className="row">
-          
-            <FakeApi02 />
-          
-          {/* <div className="col-md-3">
-                <FakeApi02 />
+      {data.map((item, index) => (
+        <div key={index} className="col-md-3">
+          <div className="card">
+            <div className="card-body">
+              <span className="card-title">UserId : {item.userId}</span> &nbsp;
+              <span className="card-title">Id : {item.id}</span>
+              {/* substring use for limit the character with start and end index */}
+              <h3 className="card-title">{item.title.substring(0, 36)}</h3>
+              <p className="card-text">
+                {item.body.substring(0, 130)}
+                {/* we can use syntax like below if data not available in api/not provided by api */}
+                {item.masaj ? item.masaj : "masag not available"}
+              </p>
             </div>
-            <div className="col-md-3">
-                <FakeApi02 />
-            </div>
-            <div className="col-md-3">
-                <FakeApi02 />
-            </div> */}
+          </div>
         </div>
-      </div>
+      ))}
     </>
   );
 }
