@@ -5,6 +5,9 @@ function FakeApi03() {
   const [items, setItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
 
+  //for filter
+  const [recoreds, setRecoreds] = useState(items);
+
   let pageLimit=20;
 
   const colorObject = {
@@ -36,6 +39,7 @@ function FakeApi03() {
       setPageCount(Math.ceil(totalNoOfPages/20)); //20 is limit for show no. of recored in one page
       // console.log(totalNoOfPages/20);
       setItems(data);
+      setRecoreds(data)
     };
     getComments();
   }, []);
@@ -58,12 +62,18 @@ function FakeApi03() {
     const commentFromServer = await fetchComments(currentPage);
     setItems(commentFromServer);
   };
+  const filterFunciton=(event)=> {
+    setRecoreds(items.filter(f=>f.name.toLowerCase().includes(event.target.value)))
+  }
   return (
     <>
-
+    
     <div className="container">
         <div className="row">
-          {items.map((item,index) => (
+          <label htmlFor="searchRecoreds" style={{fontSize:'30'}}><h2> Search Recoreds Here </h2></label>
+          <input type="text" name="searchRecoreds" id="searchRecoreds" className="form-control" onChange={filterFunciton} placeholder="Search by name..."/>
+          {/* {items.map((item,index) => ( */}
+          {recoreds.map((item,index) => (
             <div className="col col-md-3" key={index}>
               <div className="card">
                 <div className="card-body">
