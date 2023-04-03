@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 function FakeApi03() {
+
   const [items, setItems] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+
+  let pageLimit=20;
 
   const colorObject = {
     titileColor: {
@@ -24,19 +28,23 @@ function FakeApi03() {
   useEffect(() => {
     const getComments = async () => {
       const res = await fetch(
-        "https://jsonplaceholder.typicode.com/comments?_page=1&_limit=20"
+        `https://jsonplaceholder.typicode.com/comments?_page=1&_limit=${pageLimit}`
       );
       const data = await res.json();
+      const totalNoOfPages=res.headers.get('x-total-count');
+      // console.log(totalNoOfPages);
+      setPageCount(Math.ceil(totalNoOfPages/20)); //20 is limit for show no. of recored in one page
+      // console.log(totalNoOfPages/20);
       setItems(data);
     };
     getComments();
   }, []);
-  console.log(items);
+  // console.log(items);
 
 
   const fetchComments = async (currentPage)=>{
     const res = await fetch(
-      `https://jsonplaceholder.typicode.com/comments?_page=${currentPage}&_limit=20`
+      `https://jsonplaceholder.typicode.com/comments?_page=${currentPage}&_limit=${pageLimit}`
     );
     const data = await res.json();
     return data;
@@ -45,7 +53,7 @@ function FakeApi03() {
   const handlePageClick = async (data) => {
     // console.log("clicked...")
     // console.log(data) show selected page number
-    console.log(data.selected); //give us page number as integer value
+    // console.log(data.selected); //give us page number as integer value
     let currentPage=data.selected+1;
     const commentFromServer = await fetchComments(currentPage);
     setItems(commentFromServer);
@@ -69,8 +77,8 @@ function FakeApi03() {
                   <p className="card-text" style={colorObject.bodyColor}>                    
                    {item.body}
                   </p>
-                  <button type="button" class="btn btn-info m-3">Button 1</button>
-                  <button type="button" class="btn btn-warning m-3">Button 2 </button>
+                  <button type="button" className="btn btn-info m-3">Button 1</button>
+                  <button type="button" className="btn btn-warning m-3">Button 2 </button>
                 </div>
               </div>
             </div>
@@ -84,8 +92,8 @@ function FakeApi03() {
         previousLabel={"Previous"} //default value
         nextLabel={"Next"} //default value
         breakLabel={"..."} //default value
-        pageCount={20} //show total number of pages (suggested dynamic)
-        marginPagesDisplayed={2} // how many pages at start and end will be show
+        pageCount={pageCount} //show total number of pages (suggested dynamic)
+        marginPagesDisplayed={3} // how many pages at start and end will be show
         pageRangeDisplayed={3} // on click of breakLabel i.e. (...) three dots show hidden pages of break label
         onPageChange={handlePageClick} // call this mehtod when user click on page
         containerClassName={"pagination justify-content-center"} // css class for unordered list
