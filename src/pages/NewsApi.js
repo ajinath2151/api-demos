@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 function NewsApi() {
-
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -21,12 +20,19 @@ function NewsApi() {
       <table border={1}>
         <tbody>
           <tr>
-            <td>author</td>
-            <td>Title</td>
-            <td>Article URL</td>
-            <td>Publish Date</td>
-          </tr> 
-          
+            <th>author</th>
+            <th>Title</th>
+            <th>Article URL</th>
+            <th>Publish Date</th>
+          </tr>
+          {data.map((item, index) => (
+            <tr>
+              <td>{item.author}</td>
+              <td>{item.title}</td>
+              <td>{item.url}</td>
+              <td>{item.publishedAt}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
